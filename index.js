@@ -4,6 +4,7 @@ import { executablePath } from "puppeteer";
 puppeteer.use(StealthPlugin());
 import * as dotenv from "dotenv";
 dotenv.config();
+import readlineSync from "readline-sync";
 
 const delay = (time) => {
   return new Promise((resolve) => {
@@ -65,51 +66,64 @@ const delay = (time) => {
 
     console.log(`\n[=] Hello, ${span[1].trim()}`);
     await delay(2000);
-    console.log(`[=] Mencoba mengambil tweet terbaru tentang Bitcoin`);
-    await newPage.goto(
-      `https://twitter.com/search?q=bitcoin&src=recent_search_click&f=live`
-    );
-
-    await newPage.waitForSelector(
-      "div.css-1dbjc4n.r-18u37iz.r-1wbh5a2.r-13hce6t > div > div.css-1dbjc4n.r-18u37iz.r-1q142lx > a"
-    );
-    console.log(`[=] Menunggu 5 detik`);
-    await delay(5000);
-    const links = await newPage.evaluate(() => {
-      return Array.from(
-        document.querySelectorAll(
-          "div.css-1dbjc4n.r-18u37iz.r-1wbh5a2.r-13hce6t > div > div.css-1dbjc4n.r-18u37iz.r-1q142lx"
-        ),
-        (a) => a.innerHTML
-      ).map((x) => {
-        return "https://twitter.com" + x.split('"')[1];
-      });
-    });
-
-    if (links.length > 0) {
-      console.log(
-        `[=] Berhasil mendapatkan ${links.length} link untuk di-retweet.\n`
+    const loops = parseInt(readlineSync.question(`Looping berapa? `));
+    console.log(`\n[#] Melakukan looping ${loops} kali`);
+    await delay(2000);
+    for (let a = 1; a <= loops; a++) {
+      console.log(`\n[${a}] Looping ke ${a}`);
+      console.log(`[${a}][~] Mencoba mengambil tweet terbaru tentang Bitcoin`);
+      await newPage.goto(
+        `https://twitter.com/search?q=bitcoin&src=recent_search_click&f=live`
       );
 
-      for (let index = 0; index < links.length; index++) {
-        let linkId = links[index].split(`/`).pop();
-        console.log(`[${index + 1}] Retweet: ${linkId}`);
-        await newPage.goto(
-          `https://twitter.com/intent/retweet?tweet_id=${linkId}`
+      await newPage.waitForSelector(
+        "div.css-1dbjc4n.r-18u37iz.r-1wbh5a2.r-13hce6t > div > div.css-1dbjc4n.r-18u37iz.r-1q142lx > a"
+      );
+      console.log(`[${a}][=] Menunggu 5 detik`);
+      await delay(5000);
+      const links = await newPage.evaluate(() => {
+        return Array.from(
+          document.querySelectorAll(
+            "div.css-1dbjc4n.r-18u37iz.r-1wbh5a2.r-13hce6t > div > div.css-1dbjc4n.r-18u37iz.r-1q142lx"
+          ),
+          (a) => a.innerHTML
+        ).map((x) => {
+          return "https://twitter.com" + x.split('"')[1];
+        });
+      });
+
+      if (links.length > 0) {
+        console.log(
+          `[${a}][=] Berhasil mendapatkan ${links.length} link untuk di-retweet.\n`
         );
-        await newPage.waitForSelector(
-          'div[data-testid="confirmationSheetConfirm"]'
-        );
-        await newPage.keyboard.press(`Enter`);
-        await delay(2000);
-        console.log(`[${index + 1}] Done!`);
-        // await newPage.screenshot({ path: `${index + 1}.png` });
-        if (index !== links.length - 1) {
-          console.log(`[${index + 1}] Menunggu 10 detik\n`);
-          await delay(10000);
-        } else {
-          console.log(`\n[s] Berhasil me-Retweet semua!`);
-          console.log(`[s] Bot Quit`);
+
+        for (let index = 0; index < links.length; index++) {
+          let linkId = links[index].split(`/`).pop();
+          console.log(`[${a}][${index + 1}] Retweet: ${linkId}`);
+          await newPage.goto(
+            `https://twitter.com/intent/retweet?tweet_id=${linkId}`
+          );
+          await newPage.waitForSelector(
+            'div[data-testid="confirmationSheetConfirm"]'
+          );
+          await newPage.keyboard.press(`Enter`);
+          await delay(2000);
+          console.log(`[${a}][${index + 1}] Done!`);
+          // await newPage.screenshot({ path: `${index + 1}.png` });
+          if (index !== links.length - 1) {
+            console.log(`[${a}][${index + 1}] Menunggu 10 detik\n`);
+            await delay(10000);
+          } else {
+            console.log(`\n[${a}] Berhasil me-Retweet semua!`);
+            console.log(`[${a}] Berhasil melakukan retweet loop ke ${a}`);
+            if (loops == a) {
+              console.log(`\n[#] Bot Exit`);
+            } else {
+              console.log(`\n[#] Biar ga baned akunmu`);
+              console.log(`[#] Kasih delay 10 menit`);
+              await delay(600000);
+            }
+          }
         }
       }
     }
