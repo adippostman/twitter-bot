@@ -119,7 +119,7 @@ const delay = (time) => {
                         await newPage.keyboard.press(`Enter`);
                         await delay(2000);
                         console.log(
-                            `[${a}][${index + 1}] Target reweeted ${linkId}`
+                            `[${a}][${index + 1}] Target reweeted: ${linkId}`
                         );
                     }
 
