@@ -107,8 +107,23 @@ const delay = (time) => {
                     }
 
                     {
-                        /* retweet by tweet id */
+                        /* like by tweet id */
                         let linkId = links[index].split(`/`).pop();
+                        console.log(
+                            `[${a}][${index + 1}] target to like: ${linkId}`
+                        );
+                        await newPage.goto(
+                            `https://twitter.com/intent/like?tweet_id=${linkId}`
+                        );
+                        await delay(10000);
+                        await newPage.keyboard.press(`Enter`);
+                        await delay(2000);
+                        console.log(
+                            `[${a}][${index + 1}] Target liked: ${linkId}`
+                        );
+                    }
+                    {
+                        /* retweet by tweet id */
                         console.log(
                             `[${a}][${index + 1}] target to retweet: ${linkId}`
                         );
