@@ -96,10 +96,7 @@ const delay = (time) => {
                         await newPage.goto(
                             `https://twitter.com/intent/follow?screen_name=${targetUsername}`
                         );
-                        await newPage.waitForSelector(
-                            'div[data-testid="confirmationSheetConfirm"]'
-                        );
-                        await delay(2000);
+                        await delay(10000);
                         await newPage.keyboard.press(`Enter`);
                         console.log(
                             `[${a}][${
@@ -127,10 +124,10 @@ const delay = (time) => {
                     }
 
                     if (index !== links.length - 1) {
-                        console.log(`[${a}][${index + 1}] Menunggu 10 detik\n`);
+                        console.log(`[${a}][${index + 1}] Menunggu 10 detik`);
                         await delay(10000);
                     } else {
-                        console.log(`\n[${a}] Berhasil me-Retweet semua!`);
+                        console.log(`\n\n[${a}] Berhasil me-Retweet semua!`);
                         console.log(
                             `[${a}] Berhasil melakukan retweet loop ke ${a}`
                         );
