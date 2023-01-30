@@ -105,7 +105,6 @@ const delay = (time) => {
                         );
                         await delay(10000);
                     }
-
                     {
                         /* like by tweet id */
                         let linkId = links[index].split(`/`).pop();
@@ -121,9 +120,11 @@ const delay = (time) => {
                         console.log(
                             `[${a}][${index + 1}] Target liked: ${linkId}`
                         );
+                        await delay(10000);
                     }
                     {
                         /* retweet by tweet id */
+                        let linkId = links[index].split(`/`).pop();
                         console.log(
                             `[${a}][${index + 1}] target to retweet: ${linkId}`
                         );
