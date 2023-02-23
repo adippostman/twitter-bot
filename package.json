@@ -11,9 +11,11 @@
   "type": "module",
   "dependencies": {
     "dotenv": "^16.0.3",
+    "moment": "^2.29.4",
     "puppeteer": "^19.5.2",
     "puppeteer-extra": "^3.3.4",
     "puppeteer-extra-plugin-stealth": "^2.11.1",
-    "readline-sync": "^1.4.10"
+    "readline-sync": "^1.4.10",
+    "user-agents": "^1.0.1278"
   }
 }
