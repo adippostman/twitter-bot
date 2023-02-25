@@ -28,7 +28,7 @@ const showMessage = (message) => {
         .toLowerCase();
 
     const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
         executablePath: executablePath(),
     });
@@ -67,6 +67,7 @@ const showMessage = (message) => {
         /** target by username */
         const targets = [
             `ZhenChao18`,
+            `fusionistio`,
             `elonmusk`,
             `cz_binance`,
             `binance`,
